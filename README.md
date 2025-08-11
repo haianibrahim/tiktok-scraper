@@ -23,7 +23,7 @@ Scrape basic details from a public TikTok video URL in PHP. This is a cleaned-up
 Install via Composer:
 
 ```bash
-composer require haianibrahim/tiktok-custom-php-scraper
+composer require haianibrahim/tiktok-scraper
 ```
 
 

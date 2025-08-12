@@ -62,7 +62,12 @@ Output shape:
 - VideoDetails::toArray(): array
 
 Exceptions
-- Throws Hki98\\TikTok\\Exception\\TikTokScraperException on invalid URLs, network failures or parsing issues.
+- Base: Hki98\\TikTok\\Exception\\TikTokScraperException (catch-all)
+- Specific:
+	- Hki98\\TikTok\\Exception\\InvalidUrlException
+	- Hki98\\TikTok\\Exception\\HttpRequestException
+	- Hki98\\TikTok\\Exception\\EmptyResponseException
+	- Hki98\\TikTok\\Exception\\ParseException
 
 
 ## Notes

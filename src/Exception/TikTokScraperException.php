@@ -6,6 +6,9 @@ namespace Hki98\TikTok\Exception;
 
 use RuntimeException;
 
-class TikTokScraperException extends RuntimeException
+/**
+ * Base library exception. Catch this to handle all scraper-related errors.
+ */
+class TikTokScraperException extends RuntimeException implements TikTokException
 {
 }

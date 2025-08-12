@@ -8,6 +8,10 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Hki98\TikTok\DTO\VideoDetails;
 use Hki98\TikTok\Exception\TikTokScraperException;
+use Hki98\TikTok\Exception\InvalidUrlException;
+use Hki98\TikTok\Exception\HttpRequestException;
+use Hki98\TikTok\Exception\EmptyResponseException;
+use Hki98\TikTok\Exception\ParseException;
 
 /**
  * TikTok video details scraper.
@@ -53,13 +57,13 @@ final class TikTokScraper
     private function assertTikTokUrl(string $url): void
     {
         // Basic validation; allow http(s) and common subdomains.
-        if (!preg_match('#^https?://([\w.-]+\.)?tiktok\.com/.*#i', $url)) {
-            throw new TikTokScraperException('Please enter a valid TikTok URL!');
+            if (!preg_match('#^https?://([\w.-]+\.)?tiktok\.com/.*#i', $url)) {
+                throw InvalidUrlException::forUrl($url);
         }
 
         // Avoid the homepage which doesn't contain video details
-        if (preg_match('#^https?://(www\.)?tiktok\.com/?$#i', $url)) {
-            throw new TikTokScraperException('Please enter a valid TikTok URL!');
+            if (preg_match('#^https?://(www\.)?tiktok\.com/?$#i', $url)) {
+                throw InvalidUrlException::forUrl($url);
         }
     }
 
@@ -74,12 +78,12 @@ final class TikTokScraper
                 ],
             ]);
         } catch (GuzzleException $e) {
-            throw new TikTokScraperException('Network error fetching page: ' . $e->getMessage(), 0, $e);
+                throw HttpRequestException::from($e);
         }
 
         $body = (string) $res->getBody();
-        if ($body === '') {
-            throw new TikTokScraperException('Empty response body from TikTok.');
+            if ($body === '') {
+                throw EmptyResponseException::create();
         }
         return $body;
     }
@@ -89,13 +93,13 @@ final class TikTokScraper
         // Find the script tag by id and extract its JSON content safely.
         $pattern = '/<script[^>]*id="' . preg_quote(self::REHYDRATION_SCRIPT_ID, '/') . '"[^>]*>(.*?)<\/script>/si';
         if (!preg_match($pattern, $html, $m)) {
-            throw new TikTokScraperException('Unable to locate embedded data on the page.');
+                throw ParseException::unableToLocateData();
         }
 
         $jsonRaw = html_entity_decode(trim($m[1]));
         $decoded = json_decode($jsonRaw, true);
-        if (!is_array($decoded)) {
-            throw new TikTokScraperException('Failed to decode embedded JSON.');
+            if (!is_array($decoded)) {
+                throw ParseException::jsonDecode();
         }
         return $decoded;
     }
@@ -154,7 +158,7 @@ final class TikTokScraper
             }
         }
 
-        throw new TikTokScraperException('Please enter a valid TikTok URL!');
+    throw ParseException::invalidStructure();
     }
 
     private function userAgent(): string

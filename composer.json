@@ -1,6 +1,6 @@
 {
     "name": "haianibrahim/tiktok-scraper",
-    "description": "Custom TikTok Video details scraper (PHP 8, PSR-4, Guzzle)",
+    "description": "Custom TikTok scraper for video posts, photo posts and user profiles (PHP 8, PSR-4, Guzzle)",
     "type": "library",
     "require": {
         "php": "^8.1",

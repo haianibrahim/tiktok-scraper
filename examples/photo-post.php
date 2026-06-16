@@ -12,8 +12,8 @@ $client = new Client([
 ]);
 $scraper = new TikTokScraper($client);
 
-// Works for both video posts (/video/) and photo posts (/photo/).
-$url = $argv[1] ?? 'https://www.tiktok.com/@scout2015/video/6718335390845095173';
+// Photo posts use the same scrape() method and return a VideoDetails DTO.
+$url = $argv[1] ?? 'https://www.tiktok.com/@hardik.kanani/photo/7370106573522472200';
 
 $details = $scraper->scrape($url);
 print_r($details->toArray());

@@ -12,8 +12,8 @@ $client = new Client([
 ]);
 $scraper = new TikTokScraper($client);
 
-// Works for both video posts (/video/) and photo posts (/photo/).
-$url = $argv[1] ?? 'https://www.tiktok.com/@scout2015/video/6718335390845095173';
+// Accepts a bare username, "@username", or a full profile URL.
+$usernameOrUrl = $argv[1] ?? 'scout2015';
 
-$details = $scraper->scrape($url);
-print_r($details->toArray());
+$info = $scraper->scrapeUser($usernameOrUrl);
+print_r($info->toArray());

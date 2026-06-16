@@ -1,7 +1,7 @@
 # TikTok Custom PHP Scraper
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-tiktok--scraper-black?logo=github)](https://github.com/haianibrahim/tiktok-scraper)
-[![GitHub Stars](https://img.shields.io/github/stars/haianibrahim/tiktok-scraper)](https://github.com/haianibrahim/tiktok-scraper/stargazers)
+[![GitHub Stars](https://img.shields.io/github/stars/haianibrahim/tiktok-scraper)](https://github.com/haianibrahim/tiktok-scraper/)
 [![Packagist Version](https://img.shields.io/packagist/v/haianibrahim/tiktok-scraper?color=%23008CFF&logo=packagist)](https://packagist.org/packages/haianibrahim/tiktok-scraper)
 ![PHP](https://img.shields.io/badge/PHP-%5E8.1-777BB4?logo=php)
 ![License](https://img.shields.io/badge/License-GPL--3.0-blue)

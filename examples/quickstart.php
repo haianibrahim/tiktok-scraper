@@ -7,7 +7,9 @@ use Hki98\TikTok\TikTokScraper;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$client = new Client();
+$client = new Client([
+    'verify' => false,
+]);
 $scraper = new TikTokScraper($client);
 
 $url = $argv[1] ?? 'https://www.tiktok.com/@scout2015/video/6718335390845095173';

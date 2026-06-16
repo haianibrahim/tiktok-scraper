@@ -7,13 +7,15 @@
 ![License](https://img.shields.io/badge/License-GPL--3.0-blue)
 ![Static Analysis](https://img.shields.io/badge/PSR-12-blueviolet)
 
-Scrape basic details from a public TikTok video URL in PHP. This is a cleaned-up, PSR‑4, PHP 8 rewrite using Guzzle and zero private APIs.
+Scrape basic details from public TikTok video posts, photo posts and user profiles in PHP. This is a cleaned-up, PSR‑4, PHP 8 rewrite using Guzzle and zero private APIs.
 
 
 ## Features
 
-- Minimal public video details: canonical URL, IDs, username, nickname, description, thumbnail and counters
-- PSR‑4 autoloaded library with typed DTO output
+- Public video posts (`/video/`): canonical URL, IDs, username, nickname, description, thumbnail and counters
+- Public photo posts (`/photo/`): same normalized shape as videos
+- Public user profiles: identity, avatars, bio, verification and follower/heart/video stats
+- PSR‑4 autoloaded library with typed, immutable DTO output
 - Pluggable Guzzle client for testing and timeouts
 - No headless browser, no TikTok private API usage
 
@@ -38,12 +40,13 @@ require __DIR__ . '/vendor/autoload.php';
 $client = new Client();
 $scraper = new TikTokScraper($client);
 
+// Works for both video posts and photo posts
 $details = $scraper->scrape('https://www.tiktok.com/@scout2015/video/6718335390845095173');
 
 print_r($details->toArray());
 ```
 
-Output shape:
+Post output shape (`VideoDetails`):
 
 - status: "ok"
 - link
@@ -56,10 +59,43 @@ Output shape:
 - views, likes, comments, shares, favorites
 
 
+## Scraping User Profiles
+
+Fetch public profile information by bare username, `@username`, or a full profile URL:
+
+```php
+use GuzzleHttp\Client;
+use Hki98\TikTok\TikTokScraper;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$scraper = new TikTokScraper(new Client());
+
+$info = $scraper->scrapeUser('scout2015');
+// Also valid: '@scout2015' or 'https://www.tiktok.com/@scout2015'
+
+print_r($info->toArray());
+```
+
+Profile output shape (`UserInfo`):
+
+- status: "ok"
+- user_id, sec_uid, username, nickname
+- signature (bio)
+- avatar_thumb, avatar_medium, avatar_larger
+- verified, private_account
+- create_time, region
+- follower_count, following_count, heart_count, video_count, digg_count, friend_count
+- profile_url
+- share_title, share_desc
+
+
 ## API
 
-- TikTokScraper::scrape(string $url): VideoDetails
+- TikTokScraper::scrape(string $url): VideoDetails — video and photo posts
+- TikTokScraper::scrapeUser(string $usernameOrUrl): UserInfo — user profiles
 - VideoDetails::toArray(): array
+- UserInfo::toArray(): array
 
 Exceptions
 - Base: Hki98\\TikTok\\Exception\\TikTokScraperException (catch-all)

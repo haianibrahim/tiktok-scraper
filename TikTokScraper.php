@@ -25,7 +25,9 @@ class TikTokScraper
     public function scrapeVideoDetails(): array
     {
         try {
-            $client = new Client();
+            $client = new Client([
+                'verify' => false,
+            ]);
             $scraper = new NewTikTokScraper($client);
             $dto = $scraper->scrape($this->url);
             return $dto->toArray();

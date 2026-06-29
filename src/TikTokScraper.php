@@ -187,7 +187,7 @@ final class TikTokScraper
             $res = $this->httpClient->request('GET', $url, [
                 'headers' => [
                     'User-Agent' => $this->userAgent(),
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
                     'Accept-Encoding' => 'gzip, deflate',
                     'Accept-Language' => 'en-US,en;q=0.9',
                     'Cache-Control' => 'no-cache',
@@ -243,7 +243,7 @@ final class TikTokScraper
 
         // Try to find canonical URL
         $canonical = $this->findFirstMatch($flatNodes, function($node) {
-            return is_string($node) && preg_match('~https?://www\.tiktok\.com/@[^/]+/(video|photo)/\d+~i', $node);
+            return is_string($node) && preg_match('~https?://www\.tiktok\.com/@[^/]*/(video|photo)/\d+~i', $node);
         });
 
         // Find the main post structure (works for both video and photo)
@@ -352,7 +352,7 @@ final class TikTokScraper
     {
         // Extract post ID and username from URL
         // Format: https://www.tiktok.com/@username/photo/1234567890
-        if (preg_match('~https?://www\.tiktok\.com/@([^/]+)/(video|photo)/(\d+)~i', $canonical, $matches)) {
+        if (preg_match('~https?://www\.tiktok\.com/@([^/]*)/(video|photo)/(\d+)~i', $canonical, $matches)) {
             $username = $matches[1];
             $postId = $matches[3];
             
@@ -429,6 +429,6 @@ final class TikTokScraper
 
     private function userAgent(): string
     {
-        return 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
+        return 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0';
     }
 }
